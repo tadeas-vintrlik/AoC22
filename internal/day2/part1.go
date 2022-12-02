@@ -84,24 +84,22 @@ func (rs roundStrat) getTotalScore() int {
 }
 
 // Create roundStart from line of input.
-func parseRoundStrat(line string) (roundStrat, error) {
+func parseRoundStrat(line string) roundStrat {
 	s := strings.Split(line, " ")
 	o := s[0][0]
 	y := s[1][0]
 	you := resp(y)
 	them := resp(o)
-	return roundStrat{you: you, oponent: them}, nil
+	return roundStrat{you: you, oponent: them}
 }
 
 func Part1Solver(in string) int {
 	r := 0
+
 	for _, v := range strings.Split(in, "\n") {
-		rs, err := parseRoundStrat(v)
-		if err != nil {
-			panic(err)
-		}
-		r += rs.getTotalScore()
+		r += parseRoundStrat(v).getTotalScore()
 	}
+
 	return r
 }
 

@@ -44,11 +44,7 @@ func (rs roundStrat) getTotalScorePart2() int {
 func Part2Solver(in string) int {
 	r := 0
 	for _, v := range strings.Split(in, "\n") {
-		rs, err := parseRoundStrat(v)
-		if err != nil {
-			panic(err)
-		}
-		r += rs.getTotalScorePart2()
+		r += parseRoundStrat(v).getTotalScorePart2()
 	}
 	return r
 }
