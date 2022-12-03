@@ -18,13 +18,12 @@ func itemToPriority(b byte) int {
 
 // Find the item shared by both compartments (letter in both halves of the line)
 func findSharedItem(l string) byte {
-	max := len(l)
-	mid := max / 2
-	for i := 0; i < mid; i++ {
-		for j := mid; j < max; j++ {
-			if l[i] == l[j] {
-				return l[i]
-			}
+	mid := len(l) / 2
+	l1 := []byte(l[:mid])
+	l2 := l[mid:]
+	for _, v := range l1 {
+		if strings.IndexByte(l2, v) != -1 {
+			return v
 		}
 	}
 	panic("No shared item found")
@@ -34,7 +33,6 @@ func Part1Solver(in string) int {
 	r := 0
 	for _, v := range strings.Split(in, "\n") {
 		r += itemToPriority(findSharedItem(v))
-
 	}
 	return r
 }

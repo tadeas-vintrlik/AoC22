@@ -8,12 +8,9 @@ import (
 // Find badge item - one byte shared between 3 elves (lines)
 func findBadgeItem(l3 [3]string) byte {
 	for i := 0; i < len(l3[0]); i++ {
-		for j := 0; j < len(l3[1]); j++ {
-			for k := 0; k < len(l3[2]); k++ {
-				if (l3[0][i] == l3[1][j]) && (l3[1][j] == l3[2][k]) {
-					return l3[0][i]
-				}
-			}
+		if strings.IndexByte(l3[1], l3[0][i]) != -1 &&
+			strings.IndexByte(l3[2], l3[0][i]) != -1 {
+			return l3[0][i]
 		}
 	}
 	panic("no badge found")

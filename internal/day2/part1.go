@@ -28,7 +28,7 @@ func (r round) getScore() int {
 
 // Create roundStart from line of input.
 func parseRound(line string) round {
-	s := strings.Split(line, " ")
+	s := strings.Fields(line)
 	return round{you: s[1][0], them: s[0][0]}
 }
 
