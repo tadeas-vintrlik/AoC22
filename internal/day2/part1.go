@@ -9,95 +9,34 @@ import (
 //go:embed input.txt
 var input string
 
-// Reponse of you/oponent Rock/paper/scissors
-type resp byte
-
-// o prefix means oponent
-var (
-	rock      resp = 'X'
-	paper     resp = 'Y'
-	scissors  resp = 'Z'
-	orock     resp = 'A'
-	opaper    resp = 'B'
-	oscissors resp = 'C'
-)
-
-type outcome int
-
-var (
-	defeat  outcome = 0
-	tie     outcome = 1
-	victory outcome = 2
-)
-
-// Score depedening on outcome (used as index)
-var score = []int{0, 3, 6}
-
-func (r resp) unexpected() string {
-	return fmt.Sprintf("invalid: %c", r)
+type round struct {
+	you  byte
+	them byte
 }
 
-// Expects a valid resp. Return score for resp type.
-func (r resp) getScore() int {
-	switch r {
-	case 'X':
-		return 1
-	case 'Y':
-		return 2
-	case 'Z':
-		return 3
-	default:
-		panic(r.unexpected())
-	}
-}
+// X => A  B  C
+// Y => B  C  A
+// Z => C  A  B
+// The order is tie, lose, win this was chosen for X and A to be first for a prettier mapping function
+// You might notice that each line is same except for offset by one
+var round_result = []int{3, 0, 6}
 
-// If r beats o.
-func (r resp) beats(o resp) bool {
-	return (o == orock && r == paper) || (o == opaper && r == scissors) || (o == oscissors && r == rock)
-}
-
-// If r ties with o.
-func (r resp) ties(o resp) bool {
-	return (o == orock && r == rock) || (o == opaper && r == paper) || (o == oscissors && r == scissors)
-}
-
-// Structure containing one line of input (response of you and your oponent)
-type roundStrat struct {
-	oponent resp
-	you     resp
-}
-
-// Get score for the outcome of the round.
-func (rs roundStrat) getRoundOutcome() outcome {
-	if rs.you.ties(rs.oponent) {
-		return tie
-	}
-	if rs.you.beats(rs.oponent) {
-		return victory
-	}
-	return defeat
-}
-
-// Get score for both outcome and your response.
-func (rs roundStrat) getTotalScore() int {
-	return score[rs.getRoundOutcome()] + rs.you.getScore()
+func (r round) getScore() int {
+	// Get the value for your play (distance from X) and score for round result
+	return int(r.you-'X'+1) + round_result[(2*int((r.you-'X'))+int((r.them-'A')))%3]
 }
 
 // Create roundStart from line of input.
-func parseRoundStrat(line string) roundStrat {
+func parseRound(line string) round {
 	s := strings.Split(line, " ")
-	o := s[0][0]
-	y := s[1][0]
-	you := resp(y)
-	them := resp(o)
-	return roundStrat{you: you, oponent: them}
+	return round{you: s[1][0], them: s[0][0]}
 }
 
 func Part1Solver(in string) int {
 	r := 0
 
 	for _, v := range strings.Split(in, "\n") {
-		r += parseRoundStrat(v).getTotalScore()
+		r += parseRound(v).getScore()
 	}
 
 	return r
