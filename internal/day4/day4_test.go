@@ -16,9 +16,25 @@ func TestPart1(t *testing.T) {
 	}
 }
 
+func TestPart1Final(t *testing.T) {
+	act := Part1Solver(input)
+	exp := 538
+	if act != exp {
+		t.Errorf("%d != %d", act, exp)
+	}
+}
+
 func TestPart2(t *testing.T) {
 	act := Part2Solver(test1)
 	exp := 4
+	if act != exp {
+		t.Errorf("%d != %d", act, exp)
+	}
+}
+
+func TestPart2Final(t *testing.T) {
+	act := Part2Solver(input)
+	exp := 792
 	if act != exp {
 		t.Errorf("%d != %d", act, exp)
 	}
