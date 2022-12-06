@@ -101,5 +101,5 @@ func Part1Solver(in string) string {
 }
 
 func Part1() string {
-	return fmt.Sprintf("Part 1 solution: %s", Part1Solver(input))
+	return fmt.Sprintf("Part 1: %s", Part1Solver(input))
 }

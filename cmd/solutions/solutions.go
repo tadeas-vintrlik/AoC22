@@ -26,6 +26,6 @@ var s []solFunc = []solFunc{
 
 func main() {
 	for i, v := range s {
-		fmt.Printf("Day %d: %s, %s\n", i+1, v[0](), v[1]())
+		fmt.Printf("Day %-2d: %-17s, %-17s\n", i+1, v[0](), v[1]())
 	}
 }
