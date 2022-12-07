@@ -5,29 +5,24 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/tadeas-vintrlik/AoC22/pkg/tree"
 )
 
 //go:embed input.txt
 var input string
 
 type fsItem struct {
-	name     string
-	size     int
-	children []*fsItem
-	parent   *fsItem
-}
-
-func (fi fsItem) isDir() bool {
-	// In theory this would return false for empty directories
-	// But these have size 0 anyways so we do not care
-	return len(fi.children) != 0
+	name  string
+	size  int
+	isDir bool
 }
 
 // Parse a ouptut of the shell into a file system. Return the root directory.
 // Assumes the input will be correct format.
-func parseShell(in string) (fsItem, error) {
-	root := fsItem{name: "/", parent: nil}
-	var c *fsItem = &root
+func parseShell(in string) (*tree.Tree[fsItem], error) {
+	root := tree.Tree[fsItem]{Value: fsItem{name: "/", isDir: true}}
+	var c *tree.Tree[fsItem] = &root
 	for _, v := range strings.Split(in, "\n") {
 		s := strings.Fields(v)
 		switch s[0] {
@@ -36,79 +31,46 @@ func parseShell(in string) (fsItem, error) {
 			case "cd":
 				switch s[2] {
 				case "..":
-					c = c.parent
+					c = tree.Parent(c)
 				case "/":
 					c = &root
 				default:
 					found := false
-					for _, v := range c.children {
-						if v.name == s[2] {
+					for _, v := range tree.Children(c) {
+						if v.Value.name == s[2] {
 							c = v
 							found = true
 							break
 						}
 					}
 					if !found {
-						return root, fmt.Errorf("directory %s contains no such sub-directory %s", c.name, s[2])
+						return &root, fmt.Errorf("directory %s contains no such sub-directory %s", c.Value.name, s[2])
 					}
 				}
 			default:
 				// List no need to do nothing
 			}
 		case "dir":
-			c.children = append(c.children, &fsItem{name: s[1], parent: c})
+			tree.Append(c, fsItem{name: s[1], isDir: true})
 		default:
 			size, err := strconv.Atoi(s[0])
 			if err != nil {
-				return root, err
+				return &root, err
 			}
-			c.children = append(c.children, &fsItem{name: s[1], size: size})
+			tree.Append(c, fsItem{name: s[1], size: size})
 			// File s[0] is size s[1] is name
 		}
 	}
-	return root, nil
-}
-
-func (fi *fsItem) directorySize() int {
-	if !fi.isDir() {
-		return fi.size
-	}
-	s := 0
-	for _, v := range fi.children {
-		s += v.directorySize()
-	}
-	return s
+	return &root, nil
 }
 
 // Change dir size to be sum of all of it's recursive files
-func (fi *fsItem) sumDirs() {
-	if !fi.isDir() {
-		return
-	}
-	s := 0
-	for _, v := range fi.children {
-		v.sumDirs()
-		v.size = v.directorySize()
-		s += v.size
-	}
-	fi.size = s
-}
-
-// Sum directories with size up to 100000
-func Part1Value(fi *fsItem) int {
-	s := 0
-	if !fi.isDir() {
-		return s
-	} else {
-		if fi.size <= 100000 {
-			s += fi.size
+func sumDirs(ft *tree.Tree[fsItem]) {
+	tree.PostorderCallback(ft, func(n *tree.Tree[fsItem]) {
+		for _, v := range tree.Children(n) {
+			n.Value.size += v.Value.size
 		}
-	}
-	for _, v := range fi.children {
-		s += Part1Value(v)
-	}
-
-	return s
+	})
 }
 
 func Part1Solver(in string) int {
@@ -116,8 +78,16 @@ func Part1Solver(in string) int {
 	if err != nil {
 		panic(err)
 	}
-	root.sumDirs()
-	return Part1Value(&root)
+	sumDirs(root)
+
+	// Sum directories with size up to 100000
+	s := 0
+	tree.PostorderCallback(root, func(t *tree.Tree[fsItem]) {
+		if t.Value.isDir && t.Value.size <= 100000 {
+			s += t.Value.size
+		}
+	})
+	return s
 }
 
 func Part1() string {
