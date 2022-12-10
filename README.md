@@ -13,18 +13,18 @@ hope for it to be idiomatic Go.
 
 - the project follows a very typical golang project structure
 
-| directory | explanation                         |
-| --------- | ----------------------------------- |
-| cmd       | directory containing executables    |
-| internal  | directory of project-only libraries |
+| directory | explanation                                                                 |
+| --------- | --------------------------------------------------------------------------- |
+| cmd       | directory containing executables                                            |
+| internal  | directory of project-only libraries                                         |
+| pkg       | directory of libraries used by this project but that can imported elsewhere |
 
 # Solutions
 
-- an executable providing the solution for each day can be found in cmd/dayX/
-- for example
+- an executable providing the solution for all days can be found in `cmd/solutions`
 
 ```sh
-cd cmd/day1
+cd cmd/solutions
 go run . # To run a temporary executable
 go build # To create an executable instead
 ```
