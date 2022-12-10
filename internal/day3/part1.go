@@ -1,13 +1,11 @@
 package day3
 
 import (
-	_ "embed"
 	"fmt"
 	"strings"
-)
 
-//go:embed input.txt
-var input string
+	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+)
 
 func itemToPriority(b byte) int {
 	if b < 'a' {
@@ -29,14 +27,14 @@ func findSharedItem(l string) byte {
 	panic("No shared item found")
 }
 
-func Part1Solver(in string) int {
+func Part1Solver(file string) int {
 	r := 0
-	for _, v := range strings.Split(in, "\n") {
+	for v := range util.ReadLines(file) {
 		r += itemToPriority(findSharedItem(v))
 	}
 	return r
 }
 
 func Part1() string {
-	return fmt.Sprintf("Part 1: %d", Part1Solver(input))
+	return fmt.Sprintf("Part 1: %d", Part1Solver("../../internal/day3/input.txt"))
 }

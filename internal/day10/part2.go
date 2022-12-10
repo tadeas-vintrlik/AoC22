@@ -1,5 +1,7 @@
 package day10
 
+import "fmt"
+
 type screen struct {
 	content [240]bool
 }
@@ -25,8 +27,8 @@ func (s screen) String() string {
 	return ret[:len(ret)-1]
 }
 
-func Part2Solver(in string) string {
-	prg, err := parsePrg(in)
+func Part2Solver(file string) string {
+	prg, err := parsePrg(file)
 	if err != nil {
 		panic(err)
 	}
@@ -60,4 +62,8 @@ func Part2Solver(in string) string {
 		cycle++
 	}
 	return screen.String()
+}
+
+func Part2() string {
+	return fmt.Sprintf("Part 2:\n%s", Part2Solver("../../internal/day10/input.txt"))
 }

@@ -1,16 +1,13 @@
 package day7
 
 import (
-	_ "embed"
 	"fmt"
 	"strconv"
 	"strings"
 
 	"github.com/tadeas-vintrlik/AoC22/pkg/tree"
+	"github.com/tadeas-vintrlik/AoC22/pkg/util"
 )
-
-//go:embed input.txt
-var input string
 
 type fsItem struct {
 	name  string
@@ -20,10 +17,10 @@ type fsItem struct {
 
 // Parse a ouptut of the shell into a file system. Return the root directory.
 // Assumes the input will be correct format.
-func parseShell(in string) (*tree.Tree[fsItem], error) {
+func parseShell(file string) (*tree.Tree[fsItem], error) {
 	root := tree.Tree[fsItem]{Value: fsItem{name: "/", isDir: true}}
 	var c *tree.Tree[fsItem] = &root
-	for _, v := range strings.Split(in, "\n") {
+	for v := range util.ReadLines(file) {
 		s := strings.Fields(v)
 		switch s[0] {
 		case "$":
@@ -73,8 +70,8 @@ func sumDirs(ft *tree.Tree[fsItem]) {
 	})
 }
 
-func Part1Solver(in string) int {
-	root, err := parseShell(in)
+func Part1Solver(file string) int {
+	root, err := parseShell(file)
 	if err != nil {
 		panic(err)
 	}
@@ -91,5 +88,5 @@ func Part1Solver(in string) int {
 }
 
 func Part1() string {
-	return fmt.Sprintf("Part 1: %d", Part1Solver(input))
+	return fmt.Sprintf("Part 1: %d", Part1Solver("../../internal/day7/input.txt"))
 }

@@ -2,8 +2,11 @@ package day10
 
 import (
 	_ "embed"
+	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/tadeas-vintrlik/AoC22/pkg/util"
 )
 
 //go:embed input.txt
@@ -15,14 +18,14 @@ type instruction struct {
 	delay int
 }
 
-func parsePrg(in string) ([]instruction, error) {
-	prg := make([]instruction, strings.Count(in, "\n")+1)
-	for i, v := range strings.Split(in, "\n") {
+func parsePrg(file string) ([]instruction, error) {
+	prg := []instruction{}
+	for v := range util.ReadLines(file) {
 		ins, err := parseInstruction(v)
 		if err != nil {
 			return []instruction{}, err
 		}
-		prg[i] = ins
+		prg = append(prg, ins)
 	}
 	return prg, nil
 }
@@ -38,8 +41,8 @@ func parseInstruction(line string) (instruction, error) {
 	return ins, err
 }
 
-func Part1Solver(in string) int {
-	prg, err := parsePrg(in)
+func Part1Solver(file string) int {
+	prg, err := parsePrg(file)
 	if err != nil {
 		panic(err)
 	}
@@ -75,4 +78,8 @@ func Part1Solver(in string) int {
 		}
 	}
 	return r
+}
+
+func Part1() string {
+	return fmt.Sprintf("Part 1: %d", Part1Solver("../../internal/day10/input.txt"))
 }

@@ -1,18 +1,18 @@
 package day1
 
 import (
-	_ "embed"
 	"fmt"
 	"sort"
 	"strconv"
-	"strings"
+
+	"github.com/tadeas-vintrlik/AoC22/pkg/util"
 )
 
 // Find the three elves with most calories in their backpack. Return the sum.
-func Part2Solver(in string) int {
+func Part2Solver(file string) int {
 	all := []int{}
 	c := 0
-	for _, v := range strings.Split(in, "\n") {
+	for v := range util.ReadLines(file) {
 		if v == "" {
 			all = append(all, c)
 			c = 0
@@ -38,5 +38,5 @@ func Part2Solver(in string) int {
 }
 
 func Part2() string {
-	return fmt.Sprintf("Part 2: %d", Part2Solver((input)))
+	return fmt.Sprintf("Part 2: %d", Part2Solver("../../internal/day1/input.txt"))
 }

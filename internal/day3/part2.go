@@ -3,6 +3,8 @@ package day3
 import (
 	"fmt"
 	"strings"
+
+	"github.com/tadeas-vintrlik/AoC22/pkg/util"
 )
 
 // Find badge item - one byte shared between 3 elves (lines)
@@ -16,19 +18,21 @@ func findBadgeItem(l3 [3]string) byte {
 	panic("no badge found")
 }
 
-func Part2Solver(in string) int {
+func Part2Solver(file string) int {
 	l3 := [3]string{}
 	r := 0
-	for i, v := range strings.Split(in, "\n") {
+	i := 0
+	for v := range util.ReadLines(file) {
 		// We want to find badge for each group of 3 elves
 		l3[i%3] = v
 		if i%3 == 2 {
 			r += itemToPriority(findBadgeItem(l3))
 		}
+		i++
 	}
 	return r
 }
 
 func Part2() string {
-	return fmt.Sprintf("Part 2: %d", Part2Solver(input))
+	return fmt.Sprintf("Part 2: %d", Part2Solver("../../internal/day3/input.txt"))
 }

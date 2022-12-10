@@ -2,7 +2,8 @@ package day4
 
 import (
 	"fmt"
-	"strings"
+
+	"github.com/tadeas-vintrlik/AoC22/pkg/util"
 )
 
 // Check if two parts of the clean sections overlap in atleast one part
@@ -11,9 +12,9 @@ func (cs cleanSection) overlapSelf() bool {
 		(cs.start2 <= cs.end1 && cs.end1 <= cs.end2) || cs.fullyContainsSelf()
 }
 
-func Part2Solver(in string) int {
+func Part2Solver(file string) int {
 	r := 0
-	for _, v := range strings.Split(in, "\n") {
+	for v := range util.ReadLines(file) {
 		if (parseCleanSection(v)).overlapSelf() {
 			r++
 		}
@@ -22,5 +23,5 @@ func Part2Solver(in string) int {
 }
 
 func Part2() string {
-	return fmt.Sprintf("Part 2: %d", Part2Solver(input))
+	return fmt.Sprintf("Part 2: %d", Part2Solver("../../internal/day4/input.txt"))
 }
