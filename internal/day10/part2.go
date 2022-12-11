@@ -1,30 +1,29 @@
 package day10
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type screen struct {
 	content [240]bool
 }
 
 func (s screen) String() string {
-	r := []string{}
+	r := strings.Builder{}
 	for i := 0; i <= 200; i += 40 {
-		l := make([]byte, 40)
-		for i, v := range s.content[i : i+40] {
+		for _, v := range s.content[i : i+40] {
 			if v {
-				l[i] = '#'
+				r.WriteByte('#')
 			} else {
-				l[i] = '.'
+				r.WriteByte('.')
 			}
 		}
-		r = append(r, string(l))
+		r.WriteByte('\n')
 	}
 
-	ret := ""
-	for _, v := range r {
-		ret += v + "\n"
-	}
-	return ret[:len(ret)-1]
+	str := r.String()
+	return str[:len(str)-1]
 }
 
 func Part2Solver(file string) string {
