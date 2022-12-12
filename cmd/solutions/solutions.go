@@ -6,6 +6,7 @@ import (
 	"github.com/tadeas-vintrlik/AoC22/internal/day1"
 	"github.com/tadeas-vintrlik/AoC22/internal/day10"
 	"github.com/tadeas-vintrlik/AoC22/internal/day11"
+	"github.com/tadeas-vintrlik/AoC22/internal/day12"
 	"github.com/tadeas-vintrlik/AoC22/internal/day2"
 	"github.com/tadeas-vintrlik/AoC22/internal/day3"
 	"github.com/tadeas-vintrlik/AoC22/internal/day4"
@@ -32,6 +33,7 @@ var s []solFunc = []solFunc{
 	{day9.Part1, day9.Part2},
 	{day10.Part1, day10.Part2},
 	{day11.Part1, day11.Part2},
+	{day12.Part1, day12.Part2},
 }
 
 func main() {
