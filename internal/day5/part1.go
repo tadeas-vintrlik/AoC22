@@ -39,7 +39,7 @@ func parseCrates(file string) crates {
 		}
 	}
 	for k := range ret {
-		util.Reverse(ret[k])
+		util.SliceReverse(ret[k])
 	}
 	return ret
 }

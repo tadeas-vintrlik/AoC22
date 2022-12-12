@@ -5,12 +5,7 @@ import (
 	"os"
 )
 
-func Reverse[T any](a []T) {
-	for i := len(a)/2 - 1; i >= 0; i-- {
-		opp := len(a) - 1 - i
-		a[i], a[opp] = a[opp], a[i]
-	}
-}
+// TODO: Maybe make a channel pkg module
 
 // Reads file sends lines on the returned channel which is closed on EOF.
 // Panics if file could not be read.
@@ -68,4 +63,22 @@ func Collect[T any](c <-chan T) []T {
 		ret = append(ret, v)
 	}
 	return ret
+}
+
+// TODO: Maybe make a slice pkg module
+
+func SliceContains[T comparable](s []T, c T) bool {
+	for _, v := range s {
+		if c == v {
+			return true
+		}
+	}
+	return false
+}
+
+func SliceReverse[T any](a []T) {
+	for i := len(a)/2 - 1; i >= 0; i-- {
+		opp := len(a) - 1 - i
+		a[i], a[opp] = a[opp], a[i]
+	}
 }
