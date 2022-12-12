@@ -30,7 +30,6 @@ func climable(c grid.Node[rune], s []grid.Node[rune]) []grid.Node[rune] {
 
 func findMinDistance(g grid.Grid[rune], root grid.Node[rune]) int {
 	dist := make(map[grid.Node[rune]]int)
-	visited := []grid.Node[rune]{root}
 	queue := []grid.Node[rune]{root}
 	dist[root] = 0
 
@@ -41,11 +40,10 @@ func findMinDistance(g grid.Grid[rune], root grid.Node[rune]) int {
 			return dist[c]
 		}
 		for _, v := range climable(c, g.GetNeigbhours(c.X, c.Y)) {
-			if util.SliceContains(visited, v) {
+			if _, ok := dist[v]; ok {
 				continue
 			}
 			dist[v] = dist[c] + 1
-			visited = append(visited, v)
 			queue = append(queue, v)
 		}
 	}
