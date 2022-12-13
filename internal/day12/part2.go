@@ -14,7 +14,9 @@ func Part2Solver(file string) int {
 	c := make(chan int, len(start))
 	for _, v := range start {
 		go func(v grid.Node[rune]) {
-			c <- findMinDistance(g, v)
+			start := v
+			end := g.Find('E')[0]
+			c <- bothPartSolver(g, start, end)
 		}(v)
 	}
 

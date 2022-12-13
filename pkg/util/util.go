@@ -118,6 +118,24 @@ func SliceReverse[T any](a []T) {
 	}
 }
 
+func SliceFilter[T any](a []T, filter func(T) bool) []T {
+	ret := []T{}
+	for _, v := range a {
+		if filter(v) {
+			ret = append(ret, v)
+		}
+	}
+	return ret
+}
+
+func SliceMap[T, V any](a []T, transform func(T) V) []V {
+	ret := make([]V, len(a))
+	for i, v := range a {
+		ret[i] = transform(v)
+	}
+	return ret
+}
+
 // Just generic utils
 
 type Ordered interface {
