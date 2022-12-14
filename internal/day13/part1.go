@@ -100,7 +100,7 @@ func correctOrder(in []packet) compared {
 		}
 	}
 	if c1.isList() && c2.isList() {
-		maxi := util.Min([]int{len(c1.list), len(c2.list)})
+		maxi := util.SliceMin([]int{len(c1.list), len(c2.list)})
 		for i := 0; i < maxi; i++ {
 			r := correctOrder([]packet{*c1.list[i], *c2.list[i]})
 			if r == wrong {
