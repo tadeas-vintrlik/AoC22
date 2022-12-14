@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 )
 
 type cleanSection struct {
@@ -31,7 +31,7 @@ func parseCleanSection(line string) cleanSection {
 
 func Part1Solver(file string) int {
 	r := 0
-	for v := range util.ReadLines(file) {
+	for v := range channels.ReadLines(file) {
 		if (parseCleanSection(v)).fullyContainsSelf() {
 			r++
 		}

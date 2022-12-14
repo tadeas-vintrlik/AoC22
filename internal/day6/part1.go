@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 )
 
 func unique(a string) bool {
@@ -18,7 +18,7 @@ func unique(a string) bool {
 }
 
 func bothPartsSolver(file string, size int) int {
-	in := <-util.ReadLines(file)
+	in := <-channels.ReadLines(file)
 	max := len(in)
 	for i := 0; i+size < max; i++ {
 		if unique(in[i : i+size]) {

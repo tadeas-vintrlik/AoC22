@@ -3,7 +3,7 @@ package day2
 import (
 	"fmt"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 )
 
 // X => A  B  C
@@ -20,7 +20,7 @@ func (r round) getScorePart2() int {
 
 func Part2Solver(file string) int {
 	r := 0
-	for v := range util.ReadLines(file) {
+	for v := range channels.ReadLines(file) {
 		r += parseRound(v).getScorePart2()
 	}
 	return r

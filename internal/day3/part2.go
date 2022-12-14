@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 )
 
 // Find badge item - one byte shared between 3 elves (lines)
@@ -22,7 +22,7 @@ func Part2Solver(file string) int {
 	l3 := [3]string{}
 	r := 0
 	i := 0
-	for v := range util.ReadLines(file) {
+	for v := range channels.ReadLines(file) {
 		// We want to find badge for each group of 3 elves
 		l3[i%3] = v
 		if i%3 == 2 {

@@ -1,11 +1,11 @@
-package util
+package channels
 
 import (
 	"bufio"
 	"os"
-)
 
-// TODO: Maybe make a channel pkg module
+	"github.com/tadeas-vintrlik/AoC22/pkg/generics"
+)
 
 // Reads file sends lines on the returned channel which is closed on EOF.
 // Panics if file could not be read.
@@ -88,90 +88,10 @@ func Collect[T any](c <-chan T) []T {
 	return ret
 }
 
-type Summable interface {
-	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr | ~int | ~int8 | ~int16 | ~int32 | ~int64 | ~float32 | ~float64
-}
-
-func Sum[T Summable](c <-chan T) T {
+func Sum[T generics.Summable](c <-chan T) T {
 	var ret T
 	for v := range c {
 		ret += v
 	}
 	return ret
-}
-
-// TODO: Maybe make a slice pkg module
-
-func SliceContains[T comparable](s []T, c T) bool {
-	for _, v := range s {
-		if c == v {
-			return true
-		}
-	}
-	return false
-}
-
-func SliceReverse[T any](a []T) {
-	for i := len(a)/2 - 1; i >= 0; i-- {
-		opp := len(a) - 1 - i
-		a[i], a[opp] = a[opp], a[i]
-	}
-}
-
-func SliceFilter[T any](a []T, filter func(T) bool) []T {
-	ret := []T{}
-	for _, v := range a {
-		if filter(v) {
-			ret = append(ret, v)
-		}
-	}
-	return ret
-}
-
-func SliceMap[T, V any](a []T, transform func(T) V) []V {
-	ret := make([]V, len(a))
-	for i, v := range a {
-		ret[i] = transform(v)
-	}
-	return ret
-}
-
-func SliceFlatten[T any](a [][]T) []T {
-	ret := []T{}
-	for _, slice := range a {
-		for _, val := range slice {
-			ret = append(ret, val)
-		}
-	}
-	return ret
-}
-
-type Ordered interface {
-	Summable | ~string
-}
-
-func SliceMin[T Ordered](s []T) T {
-	if len(s) == 0 {
-		panic("Min called on empty slice")
-	}
-	min := s[0]
-	for i := 1; i < len(s); i++ {
-		if s[i] < min {
-			min = s[i]
-		}
-	}
-	return min
-}
-
-func SliceMax[T Ordered](s []T) T {
-	if len(s) == 0 {
-		panic("Min called on empty slice")
-	}
-	max := s[0]
-	for i := 1; i < len(s); i++ {
-		if s[i] > max {
-			max = s[i]
-		}
-	}
-	return max
 }

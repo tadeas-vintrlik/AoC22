@@ -7,7 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
+	"github.com/tadeas-vintrlik/AoC22/pkg/slice"
 )
 
 type packet struct {
@@ -100,7 +101,7 @@ func correctOrder(in []packet) compared {
 		}
 	}
 	if c1.isList() && c2.isList() {
-		maxi := util.SliceMin([]int{len(c1.list), len(c2.list)})
+		maxi := slice.Min([]int{len(c1.list), len(c2.list)})
 		for i := 0; i < maxi; i++ {
 			r := correctOrder([]packet{*c1.list[i], *c2.list[i]})
 			if r == wrong {
@@ -148,7 +149,7 @@ func checkOrders(in <-chan []packet) <-chan int {
 }
 
 func Part1Solver(file string) int {
-	return util.Sum(checkOrders(parsePacketPairs(util.ReadParagraphs(file))))
+	return channels.Sum(checkOrders(parsePacketPairs(channels.ReadParagraphs(file))))
 }
 
 func Part1() string {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 )
 
 // Find the elf with most calories in their backpack. Return the number of calories
@@ -12,7 +12,7 @@ import (
 func Part1Solver(file string) int {
 	max := 0
 	c := 0
-	for v := range util.ReadLines(file) {
+	for v := range channels.ReadLines(file) {
 		if v == "" {
 			if c > max {
 				max = c

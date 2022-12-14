@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 )
 
 func Part2Solver(file string) int {
-	monkeys := util.Collect(parseMonkeys(util.ReadParagraphs(file)))
+	monkeys := channels.Collect(parseMonkeys(channels.ReadParagraphs(file)))
 	// Find a common multiple
 	cm := 1
 	for _, v := range monkeys {
