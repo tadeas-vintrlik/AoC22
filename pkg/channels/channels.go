@@ -63,6 +63,7 @@ func Map[T, V any](c <-chan T, transform func(T) V) <-chan V {
 		for val := range c {
 			ret <- transform(val)
 		}
+		close(ret)
 	}()
 	return ret
 }
