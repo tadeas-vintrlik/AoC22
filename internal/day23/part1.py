@@ -34,6 +34,7 @@ def get_neighbours(elf, elves):
 
 def round(number):
     global elves
+    moved = False
     # Part one of round
     proposed = {}
     for i, elf in enumerate(elves):
@@ -68,11 +69,19 @@ def round(number):
     for i, elf in enumerate(elves):
         if elf in proposed:
             elves[i] = proposed[elf]
-    return elves
+            moved = True
+    return moved
 
 
-for i in range(10):
-    round(i)
+moved = True
+i = 0
+while moved:
+    moved = round(i)
+    i += 1
+    if i == 10:
+        # Part 1
+        board = create_board(elves)
+        print("".join([cell for row in board for cell in row]).count("."))
 
-board = create_board(elves)
-print("".join([cell for row in board for cell in row]).count("."))
+# Part 2
+print(i)
