@@ -38,5 +38,5 @@ func Part1Solver(in string) int {
 }
 
 func Part1() string {
-	return fmt.Sprintf("Part 1 result: %d", Part1Solver(input))
+	return fmt.Sprintf("Part 1: %d", Part1Solver(input))
 }
