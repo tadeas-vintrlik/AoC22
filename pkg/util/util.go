@@ -57,10 +57,45 @@ func ReadParagraphs(file string) <-chan string {
 	return c
 }
 
+func Map[T, V any](c <-chan T, transform func(T) V) <-chan V {
+	ret := make(chan V, 50)
+	go func() {
+		for val := range c {
+			ret <- transform(val)
+		}
+	}()
+	return ret
+}
+
+func Flatten[T any](c <-chan []T) <-chan T {
+	ret := make(chan T, 50)
+	go func() {
+		for slice := range c {
+			for _, val := range slice {
+				ret <- val
+			}
+		}
+		close(ret)
+	}()
+	return ret
+}
+
 func Collect[T any](c <-chan T) []T {
 	var ret []T
 	for v := range c {
 		ret = append(ret, v)
+	}
+	return ret
+}
+
+type Summable interface {
+	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr | ~int | ~int8 | ~int16 | ~int32 | ~int64 | ~float32 | ~float64
+}
+
+func Sum[T Summable](c <-chan T) T {
+	var ret T
+	for v := range c {
+		ret += v
 	}
 	return ret
 }
@@ -81,4 +116,23 @@ func SliceReverse[T any](a []T) {
 		opp := len(a) - 1 - i
 		a[i], a[opp] = a[opp], a[i]
 	}
+}
+
+// Just generic utils
+
+type Ordered interface {
+	Summable | ~string
+}
+
+func Min[T Ordered](s []T) T {
+	if len(s) == 0 {
+		panic("Min called on empty slice")
+	}
+	min := s[0]
+	for i := 1; i < len(s); i++ {
+		if s[i] < min {
+			min = s[i]
+		}
+	}
+	return min
 }
