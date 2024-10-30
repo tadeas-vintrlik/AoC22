@@ -6,45 +6,22 @@ import (
 	"strings"
 )
 
-// Get my response depending on o (oponent) response and the desired outcome.
-func (o resp) getMyResp(oc outcome) resp {
-	switch o {
-	case orock:
-		return [3]resp{scissors, rock, paper}[oc]
-	case opaper:
-		return [3]resp{rock, paper, scissors}[oc]
-	case oscissors:
-		return [3]resp{paper, scissors, rock}[oc]
-	default:
-		panic(o.unexpected())
-	}
-}
+// X => A  B  C
+// Y => C  A  B
+// Z => B  C  A
+// Similar to round_result in part 1 except now we want value of move
+var choice_value = []int{3, 1, 2}
 
-// Part2 has new meaning for these characters these are infact desired outcomes.
-func (o resp) getRoundOutcomePart2() outcome {
-	switch o {
-	case 'X':
-		return defeat
-	case 'Y':
-		return tie
-	case 'Z':
-		return victory
-	default:
-		panic(o.unexpected())
-	}
-}
-
-// Get score for both the round outcome and our response.
-func (rs roundStrat) getTotalScorePart2() int {
-	oc := rs.you.getRoundOutcomePart2()
-	r := rs.oponent.getMyResp(oc)
-	return r.getScore() + score[oc]
+func (r round) getScorePart2() int {
+	// value for round outcome is dependent on your character
+	// X => 0, Y => 3, Z => 6
+	return int(r.you-'X')*3 + choice_value[(int((r.you-'X'))+int((r.them-'A')))%3]
 }
 
 func Part2Solver(in string) int {
 	r := 0
 	for _, v := range strings.Split(in, "\n") {
-		r += parseRoundStrat(v).getTotalScorePart2()
+		r += parseRound(v).getScorePart2()
 	}
 	return r
 }

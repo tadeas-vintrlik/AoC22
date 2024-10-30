@@ -7,5 +7,5 @@ import (
 )
 
 func main() {
-	fmt.Printf("Day 1: %s, %s", day1.Part1(), day1.Part2())
+	fmt.Printf("Day 1: %s, %s\n", day1.Part1(), day1.Part2())
 }
