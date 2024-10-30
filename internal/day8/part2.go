@@ -1,5 +1,7 @@
 package day8
 
+import "fmt"
+
 func scenicScore(m [][]int, i, j int) int {
 	c := m[i][j]
 	st := 0
@@ -37,8 +39,8 @@ func scenicScore(m [][]int, i, j int) int {
 	return sl * sr * st * sb
 }
 
-func Part2Solver(in string) int {
-	m := parseInput(in)
+func Part2Solver(file string) int {
+	m := parseInput(file)
 	maxi := len(m) - 1
 	maxj := len(m[0]) - 1
 
@@ -56,4 +58,8 @@ func Part2Solver(in string) int {
 	}
 
 	return ss
+}
+
+func Part2() string {
+	return fmt.Sprintf("Part 2: %d", Part2Solver("../../internal/day8/input.txt"))
 }

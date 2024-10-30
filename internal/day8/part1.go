@@ -1,20 +1,19 @@
 package day8
 
 import (
-	_ "embed"
-	"strings"
+	"fmt"
+
+	"github.com/tadeas-vintrlik/AoC22/pkg/util"
 )
 
-//go:embed input.txt
-var input string
-
-func parseInput(in string) [][]int {
-	r := make([][]int, strings.Count(in, "\n")+1)
-	for i, v := range strings.Split(in, "\n") {
-		r[i] = make([]int, len(v))
+func parseInput(file string) [][]int {
+	r := [][]int{}
+	for v := range util.ReadLines(file) {
+		l := make([]int, len(v))
 		for j, b := range v {
-			r[i][j] = int(b - '0')
+			l[j] = int(b - '0')
 		}
+		r = append(r, l)
 	}
 	return r
 }
@@ -61,8 +60,8 @@ func visible(m [][]int, i, j int) bool {
 	return visible
 }
 
-func Part1Solver(in string) int {
-	m := parseInput(in)
+func Part1Solver(file string) int {
+	m := parseInput(file)
 	maxi := len(m) - 1
 	maxj := len(m[0]) - 1
 
@@ -77,4 +76,8 @@ func Part1Solver(in string) int {
 	}
 
 	return v
+}
+
+func Part1() string {
+	return fmt.Sprintf("Part 1: %d", Part1Solver("../../internal/day8/input.txt"))
 }

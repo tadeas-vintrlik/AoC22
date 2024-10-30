@@ -4,12 +4,14 @@ import (
 	"fmt"
 
 	"github.com/tadeas-vintrlik/AoC22/internal/day1"
+	"github.com/tadeas-vintrlik/AoC22/internal/day10"
 	"github.com/tadeas-vintrlik/AoC22/internal/day2"
 	"github.com/tadeas-vintrlik/AoC22/internal/day3"
 	"github.com/tadeas-vintrlik/AoC22/internal/day4"
 	"github.com/tadeas-vintrlik/AoC22/internal/day5"
 	"github.com/tadeas-vintrlik/AoC22/internal/day6"
 	"github.com/tadeas-vintrlik/AoC22/internal/day7"
+	"github.com/tadeas-vintrlik/AoC22/internal/day8"
 )
 
 type partFunc func() string
@@ -24,6 +26,8 @@ var s []solFunc = []solFunc{
 	{day5.Part1, day5.Part2},
 	{day6.Part1, day6.Part2},
 	{day7.Part1, day7.Part2},
+	{day8.Part1, day8.Part2},
+	{day10.Part1, day10.Part2},
 }
 
 func main() {

@@ -1,16 +1,12 @@
 package day5
 
 import (
-	_ "embed"
 	"fmt"
 	"strconv"
 	"strings"
 
 	"github.com/tadeas-vintrlik/AoC22/pkg/util"
 )
-
-//go:embed input.txt
-var input string
 
 // The crate layout is a map of byte slices. The index is the column number.
 // The top of the stack is the last element of each slice.
@@ -27,9 +23,9 @@ func (c crates) move(ins instruction) {
 	c[ins.to] = to
 }
 
-func parseCrates(in string) crates {
+func parseCrates(file string) crates {
 	ret := make(map[int][]byte)
-	for _, v := range strings.Split(in, "\n") {
+	for v := range util.ReadLines(file) {
 		if v[1] == '1' {
 			break
 		}
@@ -69,10 +65,10 @@ func parseInstruction(l string) (instruction, error) {
 	return instruction{amount: a, from: f, to: t}, err
 }
 
-func Part1Solver(in string) string {
-	c := parseCrates(in)
+func Part1Solver(file string) string {
+	c := parseCrates(file)
 	begun := false
-	for _, v := range strings.Split(in, "\n") {
+	for v := range util.ReadLines(file) {
 		if v == "" {
 			begun = true
 			continue
@@ -101,5 +97,5 @@ func Part1Solver(in string) string {
 }
 
 func Part1() string {
-	return fmt.Sprintf("Part 1: %s", Part1Solver(input))
+	return fmt.Sprintf("Part 1: %s", Part1Solver("../../internal/day5/input.txt"))
 }

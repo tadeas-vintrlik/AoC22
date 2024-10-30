@@ -1,9 +1,9 @@
 package day2
 
 import (
-	_ "embed"
 	"fmt"
-	"strings"
+
+	"github.com/tadeas-vintrlik/AoC22/pkg/util"
 )
 
 // X => A  B  C
@@ -18,14 +18,14 @@ func (r round) getScorePart2() int {
 	return int(r.you-'X')*3 + choice_value[(int((r.you-'X'))+int((r.them-'A')))%3]
 }
 
-func Part2Solver(in string) int {
+func Part2Solver(file string) int {
 	r := 0
-	for _, v := range strings.Split(in, "\n") {
+	for v := range util.ReadLines(file) {
 		r += parseRound(v).getScorePart2()
 	}
 	return r
 }
 
 func Part2() string {
-	return fmt.Sprintf("Part 2: %d", Part2Solver(input))
+	return fmt.Sprintf("Part 2: %d", Part2Solver("../../internal/day2/input.txt"))
 }

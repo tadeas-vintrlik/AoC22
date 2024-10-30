@@ -1,14 +1,12 @@
 package day4
 
 import (
-	_ "embed"
 	"fmt"
 	"strconv"
 	"strings"
-)
 
-//go:embed input.txt
-var input string
+	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+)
 
 type cleanSection struct {
 	start1, end1, start2, end2 int
@@ -31,9 +29,9 @@ func parseCleanSection(line string) cleanSection {
 	return cleanSection{start1, end1, start2, end2}
 }
 
-func Part1Solver(in string) int {
+func Part1Solver(file string) int {
 	r := 0
-	for _, v := range strings.Split(in, "\n") {
+	for v := range util.ReadLines(file) {
 		if (parseCleanSection(v)).fullyContainsSelf() {
 			r++
 		}
@@ -42,5 +40,5 @@ func Part1Solver(in string) int {
 }
 
 func Part1() string {
-	return fmt.Sprintf("Part 1: %d", Part1Solver(input))
+	return fmt.Sprintf("Part 1: %d", Part1Solver("../../internal/day4/input.txt"))
 }

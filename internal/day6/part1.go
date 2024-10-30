@@ -1,13 +1,11 @@
 package day6
 
 import (
-	_ "embed"
 	"fmt"
 	"strings"
-)
 
-//go:embed input.txt
-var input string
+	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+)
 
 func unique(a string) bool {
 	max := len(a)
@@ -19,7 +17,8 @@ func unique(a string) bool {
 	return true
 }
 
-func bothPartsSolver(in string, size int) int {
+func bothPartsSolver(file string, size int) int {
+	in := <-util.ReadLines(file)
 	max := len(in)
 	for i := 0; i+size < max; i++ {
 		if unique(in[i : i+size]) {
@@ -29,10 +28,10 @@ func bothPartsSolver(in string, size int) int {
 	panic("solution not found")
 }
 
-func Part1Solver(in string) int {
-	return bothPartsSolver(in, 4)
+func Part1Solver(file string) int {
+	return bothPartsSolver(file, 4)
 }
 
 func Part1() string {
-	return fmt.Sprintf("Part 1: %d", Part1Solver(input))
+	return fmt.Sprintf("Part 1: %d", Part1Solver("../../internal/day6/input.txt"))
 }

@@ -1,13 +1,11 @@
 package day2
 
 import (
-	_ "embed"
 	"fmt"
 	"strings"
-)
 
-//go:embed input.txt
-var input string
+	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+)
 
 type round struct {
 	you  byte
@@ -32,10 +30,10 @@ func parseRound(line string) round {
 	return round{you: s[1][0], them: s[0][0]}
 }
 
-func Part1Solver(in string) int {
+func Part1Solver(file string) int {
 	r := 0
 
-	for _, v := range strings.Split(in, "\n") {
+	for v := range util.ReadLines(file) {
 		r += parseRound(v).getScore()
 	}
 
@@ -43,5 +41,5 @@ func Part1Solver(in string) int {
 }
 
 func Part1() string {
-	return fmt.Sprintf("Part 1: %d", Part1Solver(input))
+	return fmt.Sprintf("Part 1: %d", Part1Solver("../../internal/day2/input.txt"))
 }

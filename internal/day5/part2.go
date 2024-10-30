@@ -3,6 +3,8 @@ package day5
 import (
 	"fmt"
 	"strings"
+
+	"github.com/tadeas-vintrlik/AoC22/pkg/util"
 )
 
 // Now can move multiple crates at once
@@ -15,10 +17,10 @@ func (c crates) movePart2(ins instruction) {
 	c[ins.to] = to
 }
 
-func Part2Solver(in string) string {
-	c := parseCrates(in)
+func Part2Solver(file string) string {
+	c := parseCrates(file)
 	begun := false
-	for _, v := range strings.Split(in, "\n") {
+	for v := range util.ReadLines(file) {
 		if v == "" {
 			begun = true
 			continue
@@ -47,5 +49,5 @@ func Part2Solver(in string) string {
 }
 
 func Part2() string {
-	return fmt.Sprintf("Part 2: %s", Part2Solver(input))
+	return fmt.Sprintf("Part 2: %s", Part2Solver("../../internal/day5/input.txt"))
 }
