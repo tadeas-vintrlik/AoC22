@@ -10,25 +10,10 @@ import (
 func Part2Solver(file string) int {
 	g := grid.Parse(util.Collect(util.ReadLines(file)), func(c rune) rune { return c })
 	start := append(g.Find('a'), g.Find('S')[0])
-
-	c := make(chan int, len(start))
-	for _, v := range start {
-		go func(v grid.Node[rune]) {
-			start := v
-			end := g.Find('E')[0]
-			c <- bothPartSolver(g, start, end)
-		}(v)
-	}
-
-	min := g.SizeX() * g.SizeY()
-	for i := 0; i < len(start); i++ {
-		v := <-c
-		if v < min {
-			min = v
-		}
-	}
-
-	return min
+	end := g.Find('E')[0]
+	return util.Min(util.SliceMap(start, func(s grid.Node[rune]) int {
+		return bothPartSolver(g, s, end)
+	}))
 }
 
 func Part2() string {
