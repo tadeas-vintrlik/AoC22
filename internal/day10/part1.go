@@ -1,16 +1,12 @@
 package day10
 
 import (
-	_ "embed"
 	"fmt"
 	"strconv"
 	"strings"
 
 	"github.com/tadeas-vintrlik/AoC22/pkg/util"
 )
-
-//go:embed input.txt
-var input string
 
 type instruction struct {
 	name  string
