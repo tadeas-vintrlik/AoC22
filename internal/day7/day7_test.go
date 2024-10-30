@@ -34,7 +34,7 @@ func TestPart2(t *testing.T) {
 
 func TestPart2Final(t *testing.T) {
 	act := Part2Solver(input)
-	exp := 24933642
+	exp := 214171
 	if act != exp {
 		t.Errorf("%d != %d", act, exp)
 	}
