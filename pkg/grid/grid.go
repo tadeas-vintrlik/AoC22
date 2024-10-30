@@ -1,10 +1,17 @@
 package grid
 
-import "github.com/tadeas-vintrlik/AoC22/pkg/slice"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/tadeas-vintrlik/AoC22/pkg/slice"
+	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+)
 
 type Grid[T comparable] struct {
 	content    []T
 	xlen, ylen int
+	xmin, ymin int
 }
 
 type Node[T any] struct {
@@ -23,6 +30,13 @@ func New[T comparable](xsize, ysize int) Grid[T] {
 	return Grid[T]{content: make([]T, xsize*ysize), xlen: xsize, ylen: ysize}
 }
 
+// Create a new empty grid where the start of x and y need not be zero
+func NewNonZero[T comparable](xmin, xmax, ymin, ymax int) Grid[T] {
+	xsize := util.Abs(xmin-xmax) + 1
+	ysize := util.Abs(ymin-ymax) + 1
+	return Grid[T]{content: make([]T, xsize*ysize), xlen: xsize, ylen: ysize, xmin: xmin, ymin: ymin}
+}
+
 // Parse a new grid from a grid of runes.
 // The transform function can be used to convert it to int for example.
 func Parse[T comparable](lines []string, transform func(rune) T) Grid[T] {
@@ -38,7 +52,7 @@ func Parse[T comparable](lines []string, transform func(rune) T) Grid[T] {
 }
 
 func (g Grid[T]) index(x, y int) int {
-	return y*g.xlen + x
+	return (y-g.ymin)*g.xlen + (x - g.xmin)
 }
 
 // Set value of node on coordinates x and y to v.
@@ -48,22 +62,22 @@ func (g *Grid[T]) Set(x, y int, v T) {
 
 // Get value of node on coordinates x and y.
 func (g *Grid[T]) Get(x, y int) T {
-	return g.content[y*g.xlen+x]
+	return g.content[g.index(x, y)]
 }
 
 // Get neighbours Vertical or Horizontal.
 func (g Grid[T]) GetNeigbhours(x, y int) []Node[T] {
 	var r []Node[T]
-	if x-1 >= 0 {
+	if x-1 >= g.MinX() {
 		r = append(r, Node[T]{Value: g.Get(x-1, y), Coord: Coord{X: x - 1, Y: y}})
 	}
-	if x+1 < g.xlen {
+	if x+1 < g.MaxX() {
 		r = append(r, Node[T]{Value: g.Get(x+1, y), Coord: Coord{X: x + 1, Y: y}})
 	}
-	if y-1 >= 0 {
+	if y-1 >= g.MinX() {
 		r = append(r, Node[T]{Value: g.Get(x, y-1), Coord: Coord{X: x, Y: y - 1}})
 	}
-	if y+1 < g.ylen {
+	if y+1 < g.MaxX() {
 		r = append(r, Node[T]{Value: g.Get(x, y+1), Coord: Coord{X: x, Y: y + 1}})
 	}
 	return r
@@ -72,8 +86,8 @@ func (g Grid[T]) GetNeigbhours(x, y int) []Node[T] {
 // Search the entire grid return list of all nodes with matching value.
 func (g Grid[T]) Find(v T) []Node[T] {
 	var ret []Node[T]
-	for i := 0; i < g.ylen; i++ {
-		for j := 0; j < g.xlen; j++ {
+	for i := g.MinY(); i < g.MaxY(); i++ {
+		for j := g.MinX(); j < g.MaxX(); j++ {
 			c := g.Get(j, i)
 			if c == v {
 				ret = append(ret, Node[T]{Value: c, Coord: Coord{X: j, Y: i}})
@@ -91,6 +105,22 @@ func (g Grid[T]) SizeX() int {
 // Get size of grid in the y axis.
 func (g Grid[T]) SizeY() int {
 	return g.ylen
+}
+
+func (g Grid[T]) MinX() int {
+	return g.xmin
+}
+
+func (g Grid[T]) MaxX() int {
+	return g.xlen + g.xmin
+}
+
+func (g Grid[T]) MinY() int {
+	return g.ymin
+}
+
+func (g Grid[T]) MaxY() int {
+	return g.ylen + g.ymin
 }
 
 // Breadth first search on the grid. Useful for example for solving mazes.
@@ -122,8 +152,8 @@ func (g Grid[T]) BFS(root Node[T], neighbours func(Node[T]) []Node[T], clb func(
 
 // Fill the entire grid with value v.
 func (g *Grid[T]) Fill(v T) {
-	for y := 0; y < g.ylen; y++ {
-		for x := 0; x < g.xlen; x++ {
+	for y := g.MinY(); y < g.MaxY(); y++ {
+		for x := g.MinX(); x < g.MaxX(); x++ {
 			g.Set(x, y, v)
 		}
 	}
@@ -148,4 +178,39 @@ func (g *Grid[T]) FillPath(p Path, v T) {
 			panic("invalid path contains diagonal movement")
 		}
 	}
+}
+
+// Manhattan distance of two coordinates
+func Distance(c1 Coord, c2 Coord) int {
+	return util.Abs(c1.X-c2.X) + util.Abs(c1.Y-c2.Y)
+}
+
+// Fill around (and including) a given coordinate in the given distance d with value v.
+func (g *Grid[T]) FillAround(c Coord, d int, v T) {
+	dx := -1
+	for y := c.Y - d; y <= c.Y+d; y++ {
+		// First half it grows, then it shrinks
+		if y <= c.Y {
+			dx++
+		}
+		if y > c.Y {
+			dx--
+		}
+		for x := c.X - dx; x <= c.X+dx; x++ {
+			if x >= g.MinX() && y >= g.MinY() && x < g.MaxX() && y < g.MaxY() {
+				g.Set(x, y, v)
+			}
+		}
+	}
+}
+
+func (g Grid[T]) String() string {
+	var sb strings.Builder
+	for y := g.MinY(); y < g.MaxY(); y++ {
+		for x := g.MinX(); x < g.MaxX(); x++ {
+			sb.WriteString(fmt.Sprintf("%v", (g.Get(x, y))))
+		}
+		sb.WriteByte('\n')
+	}
+	return sb.String()
 }

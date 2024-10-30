@@ -1,6 +1,8 @@
 package grid
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestNew(t *testing.T) {
 	x := 6
@@ -178,4 +180,116 @@ func TestFillPathPanic(t *testing.T) {
 		Coord{X: 1, Y: 1},
 	}
 	g.FillPath(p, 1)
+}
+
+func TestDistance(t *testing.T) {
+	act := Distance(Coord{X: 8, Y: 7}, Coord{X: 2, Y: 10})
+	exp := 9
+	if act != exp {
+		t.Errorf("%d != %d", act, exp)
+	}
+}
+
+func TestFillAround(t *testing.T) {
+	expstr := []string{
+		"..#..",
+		".###.",
+		"#####",
+		".###.",
+		"..#..",
+	}
+	g := New[string](5, 5)
+	g.Fill(".")
+	g.FillAround(Coord{X: 2, Y: 2}, 2, "#")
+	act := g.String()
+	exp := Parse(expstr, func(r rune) string { return string(r) }).String()
+	if act != exp {
+		t.Errorf("\n%s != \n%s", act, exp)
+	}
+}
+
+func TestFillAroundLarger(t *testing.T) {
+	expstr := []string{
+		"........#####...............",
+		".......#######..............",
+		"......#########.............",
+		".....###########............",
+		"....#############...........",
+		"...###############..........",
+		"..#################.........",
+		".###################........",
+		"..#################.........",
+		"...###############..........",
+		"....#############...........",
+		".....###########............",
+		"......#########.............",
+		".......#######..............",
+		"........#####...............",
+		".........###................",
+		"..........#.................",
+	}
+	g := New[string](28, 17)
+	g.Fill(".")
+	g.FillAround(Coord{X: 10, Y: 7}, 9, "#")
+	act := g.String()
+	exp := Parse(expstr, func(r rune) string { return string(r) }).String()
+	if act != exp {
+		t.Errorf("\n%s != \n%s", act, exp)
+	}
+}
+
+func TestNewNonZero(t *testing.T) {
+	expstr := []string{
+		"123",
+		"456",
+		"789",
+	}
+	g := NewNonZero[rune](-1, 1, -1, 1)
+	g.Set(-1, -1, '1')
+	g.Set(0, -1, '2')
+	g.Set(1, -1, '3')
+	g.Set(-1, 0, '4')
+	g.Set(0, 0, '5')
+	g.Set(1, 0, '6')
+	g.Set(-1, 1, '7')
+	g.Set(0, 1, '8')
+	g.Set(1, 1, '9')
+	exp := Parse(expstr, func(r rune) rune { return r })
+	for i, v := range g.content {
+		if g.content[i] != exp.content[i] {
+			t.Errorf("Unexpected node: %c", v)
+		}
+	}
+}
+
+func TestString(t *testing.T) {
+	expstr := []string{
+		"123",
+		"456",
+		"789",
+	}
+	g := Parse(expstr, func(r rune) int { return int(r - '0') })
+	act := g.String()
+	exp := "123\n456\n789\n"
+	if act != exp {
+		t.Errorf("%s != %s", act, exp)
+	}
+}
+
+func TestStringNonZero(t *testing.T) {
+	g := NewNonZero[int](-1, 1, -1, 1)
+	g.Set(-1, -1, 1)
+	g.Set(0, -1, 2)
+	g.Set(1, -1, 3)
+	g.Set(-1, 0, 4)
+	g.Set(0, 0, 5)
+	g.Set(1, 0, 6)
+	g.Set(-1, 1, 7)
+	g.Set(0, 1, 8)
+	g.Set(1, 1, 9)
+	act := g.String()
+	exp := "123\n456\n789\n"
+	if act != exp {
+		t.Errorf("%s != %s", act, exp)
+	}
 }
