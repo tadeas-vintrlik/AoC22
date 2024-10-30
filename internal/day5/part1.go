@@ -5,7 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
+	"github.com/tadeas-vintrlik/AoC22/pkg/slice"
 )
 
 // The crate layout is a map of byte slices. The index is the column number.
@@ -25,7 +26,7 @@ func (c crates) move(ins instruction) {
 
 func parseCrates(file string) crates {
 	ret := make(map[int][]byte)
-	for v := range util.ReadLines(file) {
+	for v := range channels.ReadLines(file) {
 		if v[1] == '1' {
 			break
 		}
@@ -39,7 +40,7 @@ func parseCrates(file string) crates {
 		}
 	}
 	for k := range ret {
-		util.SliceReverse(ret[k])
+		slice.Reverse(ret[k])
 	}
 	return ret
 }
@@ -68,7 +69,7 @@ func parseInstruction(l string) (instruction, error) {
 func Part1Solver(file string) string {
 	c := parseCrates(file)
 	begun := false
-	for v := range util.ReadLines(file) {
+	for v := range channels.ReadLines(file) {
 		if v == "" {
 			begun = true
 			continue

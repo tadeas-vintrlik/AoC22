@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 )
 
 func Part2Solver(file string) int {
@@ -20,7 +20,7 @@ func Part2Solver(file string) int {
 			}},
 		}},
 	}
-	packets := util.Collect(util.Flatten(parsePacketPairs(util.ReadParagraphs(file))))
+	packets := channels.Collect(channels.Flatten(parsePacketPairs(channels.ReadParagraphs(file))))
 	packets = append(packets, divPackets...)
 	sort.SliceStable(packets, func(i, j int) bool {
 		return correctOrder([]packet{packets[i], packets[j]}) == right

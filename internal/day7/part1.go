@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 	"github.com/tadeas-vintrlik/AoC22/pkg/tree"
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
 )
 
 type fsItem struct {
@@ -20,7 +20,7 @@ type fsItem struct {
 func parseShell(file string) (*tree.Tree[fsItem], error) {
 	root := tree.Tree[fsItem]{Value: fsItem{name: "/", isDir: true}}
 	var c *tree.Tree[fsItem] = &root
-	for v := range util.ReadLines(file) {
+	for v := range channels.ReadLines(file) {
 		s := strings.Fields(v)
 		switch s[0] {
 		case "$":

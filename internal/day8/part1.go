@@ -3,12 +3,12 @@ package day8
 import (
 	"fmt"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 )
 
 func parseInput(file string) [][]int {
 	r := [][]int{}
-	for v := range util.ReadLines(file) {
+	for v := range channels.ReadLines(file) {
 		l := make([]int, len(v))
 		for j, b := range v {
 			l[j] = int(b - '0')

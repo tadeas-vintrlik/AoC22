@@ -5,14 +5,14 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 )
 
 // Find the three elves with most calories in their backpack. Return the sum.
 func Part2Solver(file string) int {
 	all := []int{}
 	c := 0
-	for v := range util.ReadLines(file) {
+	for v := range channels.ReadLines(file) {
 		if v == "" {
 			all = append(all, c)
 			c = 0

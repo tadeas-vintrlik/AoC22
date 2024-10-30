@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 )
 
 type instruction struct {
@@ -16,7 +16,7 @@ type instruction struct {
 
 func parsePrg(file string) ([]instruction, error) {
 	prg := []instruction{}
-	for v := range util.ReadLines(file) {
+	for v := range channels.ReadLines(file) {
 		ins, err := parseInstruction(v)
 		if err != nil {
 			return []instruction{}, err

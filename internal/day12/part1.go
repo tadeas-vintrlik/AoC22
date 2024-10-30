@@ -3,8 +3,8 @@ package day12
 import (
 	"fmt"
 
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 	"github.com/tadeas-vintrlik/AoC22/pkg/grid"
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
 )
 
 func climable(c grid.Node[rune], s []grid.Node[rune]) []grid.Node[rune] {
@@ -47,7 +47,7 @@ func bothPartSolver(g grid.Grid[rune], start, end grid.Node[rune]) int {
 }
 
 func Part1Solver(file string) int {
-	g := grid.Parse(util.Collect(util.ReadLines(file)), func(c rune) rune { return c })
+	g := grid.Parse(channels.Collect(channels.ReadLines(file)), func(c rune) rune { return c })
 	start := g.Find('S')[0]
 	end := g.Find('E')[0]
 	return bothPartSolver(g, start, end)

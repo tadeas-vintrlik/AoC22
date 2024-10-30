@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 )
 
 type monkey struct {
@@ -93,7 +93,7 @@ func simulateRound(monkeys *[]monkey, worryDecrease int) {
 }
 
 func Part1Solver(file string) int {
-	monkeys := util.Collect(parseMonkeys(util.ReadParagraphs(file)))
+	monkeys := channels.Collect(parseMonkeys(channels.ReadParagraphs(file)))
 	// Simulate 20 rounds
 	for i := 0; i < 20; i++ {
 		simulateRound(&monkeys, 3)

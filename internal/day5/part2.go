@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 )
 
 // Now can move multiple crates at once
@@ -20,7 +20,7 @@ func (c crates) movePart2(ins instruction) {
 func Part2Solver(file string) string {
 	c := parseCrates(file)
 	begun := false
-	for v := range util.ReadLines(file) {
+	for v := range channels.ReadLines(file) {
 		if v == "" {
 			begun = true
 			continue

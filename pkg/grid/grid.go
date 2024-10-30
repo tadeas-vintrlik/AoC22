@@ -1,8 +1,6 @@
 package grid
 
-import "github.com/tadeas-vintrlik/AoC22/pkg/util"
-
-// TODO: Grid tests
+import "github.com/tadeas-vintrlik/AoC22/pkg/slice"
 
 type Grid[T comparable] struct {
 	content    []T
@@ -134,10 +132,10 @@ func (g *Grid[T]) Fill(v T) {
 // Fill path with value v, only works for 90 degree angles (vertical/horizontal)
 func (g *Grid[T]) FillPath(p Path, v T) {
 	for i := 0; i < len(p)-1; i++ {
-		xfrom := util.SliceMin([]int{p[i].X, p[i+1].X})
-		xto := util.SliceMax([]int{p[i].X, p[i+1].X})
-		yfrom := util.SliceMin([]int{p[i].Y, p[i+1].Y})
-		yto := util.SliceMax([]int{p[i].Y, p[i+1].Y})
+		xfrom := slice.Min([]int{p[i].X, p[i+1].X})
+		xto := slice.Max([]int{p[i].X, p[i+1].X})
+		yfrom := slice.Min([]int{p[i].Y, p[i+1].Y})
+		yto := slice.Max([]int{p[i].Y, p[i+1].Y})
 		if xfrom-xto == 0 {
 			for y := yfrom; y <= yto; y++ {
 				g.Set(xfrom, y, v)

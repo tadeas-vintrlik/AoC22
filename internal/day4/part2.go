@@ -3,7 +3,7 @@ package day4
 import (
 	"fmt"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 )
 
 // Check if two parts of the clean sections overlap in atleast one part
@@ -14,7 +14,7 @@ func (cs cleanSection) overlapSelf() bool {
 
 func Part2Solver(file string) int {
 	r := 0
-	for v := range util.ReadLines(file) {
+	for v := range channels.ReadLines(file) {
 		if (parseCleanSection(v)).overlapSelf() {
 			r++
 		}

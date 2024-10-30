@@ -3,22 +3,23 @@ package day14
 import (
 	"fmt"
 
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 	"github.com/tadeas-vintrlik/AoC22/pkg/grid"
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/slice"
 )
 
 func Part2Solver(file string) int {
-	paths := util.Collect(parseRockPaths(util.ReadLines(file)))
-	allCoords := util.SliceFlatten(util.SliceMap(paths, func(p grid.Path) []grid.Coord {
-		return util.SliceMap(p, func(c grid.Coord) grid.Coord {
+	paths := channels.Collect(parseRockPaths(channels.ReadLines(file)))
+	allCoords := slice.Flatten(slice.Map(paths, func(p grid.Path) []grid.Coord {
+		return slice.Map(p, func(c grid.Coord) grid.Coord {
 			return c
 		})
 	}))
 	// We extend the bounds a little to fit for part2
-	xmax := util.SliceMax(util.SliceMap(allCoords, func(c grid.Coord) int {
+	xmax := slice.Max(slice.Map(allCoords, func(c grid.Coord) int {
 		return c.X
 	})) * 2
-	ymax := util.SliceMax(util.SliceMap(allCoords, func(c grid.Coord) int {
+	ymax := slice.Max(slice.Map(allCoords, func(c grid.Coord) int {
 		return c.Y
 	})) + 2
 	g := grid.New[rune](xmax+1, ymax+1)

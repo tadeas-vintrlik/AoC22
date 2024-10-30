@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
 )
 
 func itemToPriority(b byte) int {
@@ -29,7 +29,7 @@ func findSharedItem(l string) byte {
 
 func Part1Solver(file string) int {
 	r := 0
-	for v := range util.ReadLines(file) {
+	for v := range channels.ReadLines(file) {
 		r += itemToPriority(findSharedItem(v))
 	}
 	return r

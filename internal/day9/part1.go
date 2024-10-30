@@ -5,7 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tadeas-vintrlik/AoC22/pkg/util"
+	"github.com/tadeas-vintrlik/AoC22/pkg/channels"
+	"github.com/tadeas-vintrlik/AoC22/pkg/slice"
 )
 
 type coordinate struct {
@@ -57,7 +58,7 @@ func moveRope(cs []coordinate, ins instruction) []coordinate {
 func bothPartSolver(file string, length int) int {
 	rope := make([]coordinate, length)
 	visited := []coordinate{}
-	for v := range util.ReadLines(file) {
+	for v := range channels.ReadLines(file) {
 		s := strings.Fields(v)
 		d, err := strconv.Atoi(s[1])
 		if err != nil {
@@ -67,7 +68,7 @@ func bothPartSolver(file string, length int) int {
 
 		for i := 0; i < ins.distance; i++ {
 			rope = moveRope(rope, ins)
-			if !util.SliceContains(visited, rope[0]) {
+			if !slice.Contains(visited, rope[0]) {
 				visited = append(visited, rope[0])
 			}
 		}
