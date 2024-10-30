@@ -8,9 +8,6 @@ func TestNew(t *testing.T) {
 	x := 6
 	y := 4
 	g := New[int](x, y)
-	if len(g.content) != x*y {
-		t.Errorf("Expected size of grid: %d != %d", x*y, len(g.content))
-	}
 	if x != g.SizeX() {
 		t.Errorf("Unexpected xsize: %d != %d", x, g.SizeX())
 	}
@@ -254,11 +251,10 @@ func TestNewNonZero(t *testing.T) {
 	g.Set(-1, 1, '7')
 	g.Set(0, 1, '8')
 	g.Set(1, 1, '9')
-	exp := Parse(expstr, func(r rune) rune { return r })
-	for i, v := range g.content {
-		if g.content[i] != exp.content[i] {
-			t.Errorf("Unexpected node: %c", v)
-		}
+	act := g.String()
+	exp := Parse(expstr, func(r rune) rune { return r }).String()
+	if act != exp {
+		t.Errorf("\n%s != \n%s", act, exp)
 	}
 }
 
@@ -291,5 +287,14 @@ func TestStringNonZero(t *testing.T) {
 	exp := "123\n456\n789\n"
 	if act != exp {
 		t.Errorf("%s != %s", act, exp)
+	}
+}
+
+func TestGetNegative(t *testing.T) {
+	g := NewNonZero[int](-1, 1, -1, 1)
+	exp := 0
+	act := g.Get(-1, -1)
+	if act != exp {
+		t.Errorf("%d != %d", act, exp)
 	}
 }

@@ -9,7 +9,7 @@ import (
 )
 
 type Grid[T comparable] struct {
-	content    []T
+	content    [][]T
 	xlen, ylen int
 	xmin, ymin int
 }
@@ -27,14 +27,22 @@ type Path []Coord
 
 // Create a new empty grid with size of xsize * ysize
 func New[T comparable](xsize, ysize int) Grid[T] {
-	return Grid[T]{content: make([]T, xsize*ysize), xlen: xsize, ylen: ysize}
+	c := make([][]T, ysize)
+	for i := 0; i < ysize; i++ {
+		s := make([]T, xsize)
+		c[i] = s
+	}
+	return Grid[T]{content: c, xlen: xsize, ylen: ysize}
 }
 
 // Create a new empty grid where the start of x and y need not be zero
 func NewNonZero[T comparable](xmin, xmax, ymin, ymax int) Grid[T] {
 	xsize := util.Abs(xmin-xmax) + 1
 	ysize := util.Abs(ymin-ymax) + 1
-	return Grid[T]{content: make([]T, xsize*ysize), xlen: xsize, ylen: ysize, xmin: xmin, ymin: ymin}
+	n := New[T](xsize, ysize)
+	n.xmin = xmin
+	n.ymin = xmin
+	return n
 }
 
 // Parse a new grid from a grid of runes.
@@ -42,7 +50,7 @@ func NewNonZero[T comparable](xmin, xmax, ymin, ymax int) Grid[T] {
 func Parse[T comparable](lines []string, transform func(rune) T) Grid[T] {
 	xlen := len(lines[0])
 	ylen := len(lines)
-	g := Grid[T]{xlen: xlen, ylen: ylen, content: make([]T, xlen*ylen)}
+	g := New[T](xlen, ylen)
 	for i, line := range lines {
 		for j, v := range line {
 			g.Set(j, i, transform(v))
@@ -51,23 +59,20 @@ func Parse[T comparable](lines []string, transform func(rune) T) Grid[T] {
 	return g
 }
 
-func (g Grid[T]) index(x, y int) int {
-	return (y-g.ymin)*g.xlen + (x - g.xmin)
-}
-
 // Set value of node on coordinates x and y to v.
 func (g *Grid[T]) Set(x, y int, v T) {
-	g.content[g.index(x, y)] = v
+	g.content[y-g.ymin][x-g.xmin] = v
 }
 
 // Get value of node on coordinates x and y.
 func (g *Grid[T]) Get(x, y int) T {
-	return g.content[g.index(x, y)]
+	return g.content[y-g.ymin][x-g.xmin]
 }
 
 // Get neighbours Vertical or Horizontal.
 func (g Grid[T]) GetNeigbhours(x, y int) []Node[T] {
 	var r []Node[T]
+	fmt.Println(x, y)
 	if x-1 >= g.MinX() {
 		r = append(r, Node[T]{Value: g.Get(x-1, y), Coord: Coord{X: x - 1, Y: y}})
 	}
@@ -77,7 +82,7 @@ func (g Grid[T]) GetNeigbhours(x, y int) []Node[T] {
 	if y-1 >= g.MinX() {
 		r = append(r, Node[T]{Value: g.Get(x, y-1), Coord: Coord{X: x, Y: y - 1}})
 	}
-	if y+1 < g.MaxX() {
+	if y+1 < g.MaxY() {
 		r = append(r, Node[T]{Value: g.Get(x, y+1), Coord: Coord{X: x, Y: y + 1}})
 	}
 	return r
