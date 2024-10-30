@@ -1,9 +1,7 @@
-import math
-
 with open("input.txt") as file:
     # Collect the elves a complex number of the coordinates
-    elves = [x + y*1j for (y, v) in [(y, v) for (y, v) in enumerate(
-        file.read().splitlines())] for (x, c) in enumerate(v) if c == "#"]
+    elves = {x + y*1j for (y, v) in [(y, v) for (y, v) in enumerate(
+        file.read().splitlines())] for (x, c) in enumerate(v) if c == "#"}
 
 # North, south, west and east directions
 directions = [-1j, 1j, -1, 1]
@@ -14,7 +12,7 @@ def create_board(elves):
     ymax = int(max(list(map(lambda x: x.imag, elves))) + 1)
     xmin = int(min(list(map(lambda x: x.real, elves))))
     xmax = int(max(list(map(lambda x: x.real, elves))) + 1)
-    return [["#" if x + y*1j in [e for e in elves] else "." for x in range(xmin, xmax)] for y in range(ymin, ymax)]
+    return [["#" if x + y*1j in elves else "." for x in range(xmin, xmax)] for y in range(ymin, ymax)]
 
 
 def draw_board(elves):
@@ -24,12 +22,8 @@ def draw_board(elves):
         print()
 
 
-def distance(x, y):
-    return math.sqrt((x.real - y.real)**2 + (y.imag - x.imag)**2)
-
-
 def get_neighbours(elf, elves):
-    return [neighbour for neighbour in list(filter(lambda x: distance(x, elf) < 2, elves)) if neighbour != elf]
+    return [neighbour for neighbour in [elf.real+x + (elf.imag+y)*1j for x in (0, -1, 1) for y in (0, -1, 1) if x != 0 or y != 0] if neighbour in elves]
 
 
 def round(number):
@@ -63,14 +57,10 @@ def round(number):
             else:
                 proposed[elf] = new
                 break
-        # elves[i] = (elf[0], (elf[1] + 1))
 
     #  Part two of round
-    for i, elf in enumerate(elves):
-        if elf in proposed:
-            elves[i] = proposed[elf]
-            moved = True
-    return moved
+    elves = {elf if elf not in proposed else proposed[elf] for elf in elves}
+    return len(proposed) != 0
 
 
 moved = True
