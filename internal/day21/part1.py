@@ -1,6 +1,6 @@
 import re
 
-with open("input.txt") as file:
+with open("test.txt") as file:
     data = {key: value for (key, value)
             in [line.split(": ") for line in file.read().splitlines()]}
 
