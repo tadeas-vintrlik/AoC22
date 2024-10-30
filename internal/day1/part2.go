@@ -8,23 +8,25 @@ import (
 	"strings"
 )
 
+// Find the three elves with most calories in their backpack. Return the sum.
 func Part2Solver(in string) int {
 	all := []int{}
-	current := 0
+	c := 0
 	for _, v := range strings.Split(in, "\n") {
 		if v == "" {
-			all = append(all, current)
-			current = 0
+			all = append(all, c)
+			c = 0
 			continue
 		}
 		i, err := strconv.Atoi(v)
 		if err != nil {
 			panic(err)
 		}
-		current += i
+		c += i
 	}
 
-	all = append(all, current)
+	// Last one will not be appended
+	all = append(all, c)
 
 	sort.Ints(all)
 	sum := 0
