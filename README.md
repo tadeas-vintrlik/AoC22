@@ -9,6 +9,9 @@ year since 2020 I've given it my best. 2020 was C. 2021 was learning Go. I wrote
 and looking back it was not really the best Go. This year I decied to do Go again but this year I
 hope for it to be idiomatic Go.
 
+After 19 days working with Go got a bit tediosu and I spent more time doing the puzzles than I wanted
+to so I switched over to Python by the end.
+
 ## Project structure
 
 - the project follows a very typical golang project structure
@@ -22,6 +25,8 @@ hope for it to be idiomatic Go.
 # Solutions
 
 - an executable providing the solution for all days can be found in `cmd/solutions`
+- inputs are on purpose not part of the repo as requested by Eric Wastl
+- for this to work you have to add input.txt to every internal/day[0-9]+
 
 ```sh
 cd cmd/solutions
