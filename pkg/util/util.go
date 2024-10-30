@@ -136,13 +136,21 @@ func SliceMap[T, V any](a []T, transform func(T) V) []V {
 	return ret
 }
 
-// Just generic utils
+func SliceFlatten[T any](a [][]T) []T {
+	ret := []T{}
+	for _, slice := range a {
+		for _, val := range slice {
+			ret = append(ret, val)
+		}
+	}
+	return ret
+}
 
 type Ordered interface {
 	Summable | ~string
 }
 
-func Min[T Ordered](s []T) T {
+func SliceMin[T Ordered](s []T) T {
 	if len(s) == 0 {
 		panic("Min called on empty slice")
 	}
@@ -153,4 +161,17 @@ func Min[T Ordered](s []T) T {
 		}
 	}
 	return min
+}
+
+func SliceMax[T Ordered](s []T) T {
+	if len(s) == 0 {
+		panic("Min called on empty slice")
+	}
+	max := s[0]
+	for i := 1; i < len(s); i++ {
+		if s[i] > max {
+			max = s[i]
+		}
+	}
+	return max
 }
