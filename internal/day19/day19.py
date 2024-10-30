@@ -10,7 +10,7 @@ def dfs(bp):
     global maxg
     co, cc, cobo, cobc, cgo, cgob = bp  # Costs of different robots
     # Stack of states ( we start with 24 minutes and 1 ore robot)
-    s = [(24, 0, 0, 0, 0, 1, 0, 0, 0, -1)]
+    s = [(24, 0, 0, 0, 0, 1, 0, 0, 0)]
     visited = set()
 
     mo = max(co, cc, cobo, cgo)  # Maximum ore cost
@@ -20,21 +20,17 @@ def dfs(bp):
         if state in visited:
             continue
         visited.add(state)
-        t, o, c, ob, g, ro, rc, rob, rg, b = state
-
-        # Finish building the robot we have started constructing
-        match b:
-            case 0:
-                ro += 1
-            case 1:
-                rc += 1
-            case 2:
-                rob += 1
-            case 3:
-                rg += 1
+        t, o, c, ob, g, ro, rc, rob, rg = state
 
         # TODO: terribly slow needs more pruning
-        if t == 0 or ro > mo or rc > cobc or rob > cgob:
+        if (
+                # Out of time
+                t == 0 or
+                # Built more robots than neccessary
+                ro > mo or rc > cobc or rob > cgob or
+                # Stockpiled more resources than neccessary
+                (o > mo and c > cobc and ob > cgob)
+        ):
             maxg = max(maxg, g)
             continue
         # print(f"{state}")
@@ -42,17 +38,17 @@ def dfs(bp):
 
         # See if we can build
         if o >= co:
-            s.append((t, o+ro-co, c+rc, ob+rob, g+rg, ro, rc, rob, rg, 0))
+            s.append((t, o+ro-co, c+rc, ob+rob, g+rg, ro+1, rc, rob, rg))
         if o >= cc:
-            s.append((t, o+ro-cc, c+rc, ob+rob, g+rg, ro, rc, rob, rg, 1))
+            s.append((t, o+ro-cc, c+rc, ob+rob, g+rg, ro, rc+1, rob, rg))
         if o >= cobo and c >= cobc:
             s.append((t, o+ro-cobo, c+rc-cobc, ob +
-                      rob, g+rg, ro, rc, rob, rg, 2))
+                      rob, g+rg, ro, rc, rob+1, rg))
         if o >= cgo and ob >= cgob:
             s.append((t, o+ro-cgo, c+rc, ob +
-                      rob-cgob, g+rg, ro, rc, rob, rg, 3))
+                      rob-cgob, g+rg, ro, rc, rob, rg+1))
         # We are just collecting resources this minute
-        s.append((t, o+ro, c+rc, ob+rob, g+rg, ro, rc, rob, rg, -1))
+        s.append((t, o+ro, c+rc, ob+rob, g+rg, ro, rc, rob, rg))
 
 
 res = 0
