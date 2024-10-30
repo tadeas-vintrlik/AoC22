@@ -44,30 +44,20 @@ func Part1Solver(file string, line int) int {
 		d := grid.Distance(r.beacon, r.sensor)
 		return []int{r.sensor.X + d, r.sensor.X - d}
 	}))
-	ys := slice.Flatten(slice.Map(s, func(r reading) []int {
-		d := grid.Distance(r.beacon, r.sensor)
-		return []int{r.sensor.Y + d, r.sensor.Y - d}
-	}))
 	xmin := slice.Min(xs)
 	xmax := slice.Max(xs)
-	ymin := slice.Min(ys)
-	ymax := slice.Max(ys)
-
-	g := grid.NewNonZero[string](xmin, xmax, ymin, ymax)
-	g.Fill(".")
-	for _, v := range s {
-		g.FillAround(v.sensor, grid.Distance(v.sensor, v.beacon), "#")
-	}
-	for _, v := range s {
-		g.Set(v.sensor.X, v.sensor.Y, "S")
-		g.Set(v.beacon.X, v.beacon.Y, "B")
-	}
 
 	y := line
 	ret := 0
-	for x := g.MinX(); x < g.MaxX(); x++ {
-		if g.Get(x, y) == "#" {
-			ret++
+	for x := xmin; x < xmax; x++ {
+		for _, v := range s {
+			c := grid.Coord{X: x, Y: y}
+			distLine := grid.Distance(c, v.sensor)
+			distBeacon := grid.Distance(v.beacon, v.sensor)
+			if distLine <= distBeacon && !(c == v.beacon || c == v.sensor) {
+				ret++
+				break
+			}
 		}
 	}
 
