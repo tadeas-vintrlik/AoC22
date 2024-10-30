@@ -3,6 +3,7 @@ package day5
 import (
 	_ "embed"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/tadeas-vintrlik/AoC22/pkg/util"
@@ -52,9 +53,20 @@ type instruction struct {
 }
 
 func parseInstruction(l string) (instruction, error) {
-	var r instruction
-	_, err := fmt.Sscanf(l, "move %d from %d to %d", &r.amount, &r.from, &r.to)
-	return r, err
+	s := strings.Split(l, " ")
+	a, err := strconv.Atoi(s[1])
+	if err != nil {
+		return instruction{}, err
+	}
+	f, err := strconv.Atoi(s[3])
+	if err != nil {
+		return instruction{}, err
+	}
+	t, err := strconv.Atoi(s[5])
+	if err != nil {
+		return instruction{}, err
+	}
+	return instruction{amount: a, from: f, to: t}, err
 }
 
 func Part1Solver(in string) string {
