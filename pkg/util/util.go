@@ -15,7 +15,7 @@ func Reverse[T any](a []T) {
 // Reads file sends lines on the returned channel which is closed on EOF.
 // Panics if file could not be read.
 func ReadLines(file string) <-chan string {
-	c := make(chan string)
+	c := make(chan string, 50)
 	f, err := os.Open(file)
 	if err != nil {
 		panic(err)
