@@ -21,6 +21,8 @@ func (p packet) isList() bool {
 	return p.containsList
 }
 
+// Could have parsed it as a JSON array, that would however require any type and type casting.
+// This way we create a generic int list parser that is type safe.
 func parsePacket(line string) packet {
 	ret := packet{parent: nil, containsList: true}
 	current := &ret
@@ -53,7 +55,6 @@ func parsePacket(line string) packet {
 			end = true
 		}
 	}
-	// Packet is always a list we don't care about the outter one
 	return ret
 }
 

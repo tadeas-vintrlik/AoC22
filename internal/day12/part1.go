@@ -26,39 +26,31 @@ func climable(c grid.Node[rune], s []grid.Node[rune]) []grid.Node[rune] {
 	return ret
 }
 
-// TODO: This would be solved with a generic graph structure and BFS implement in pkg
-
-func findMinDistance(g grid.Grid[rune], root grid.Node[rune]) int {
+func bothPartSolver(g grid.Grid[rune], start, end grid.Node[rune]) int {
 	dist := make(map[grid.Node[rune]]int)
-	queue := []grid.Node[rune]{root}
-	dist[root] = 0
-
-	for len(queue) != 0 {
-		c := queue[0]
-		queue = queue[1:]
-		if c.Value == 'E' {
-			return dist[c]
-		}
-		for _, v := range climable(c, g.GetNeigbhours(c.X, c.Y)) {
-			if _, ok := dist[v]; ok {
-				continue
-			}
-			dist[v] = dist[c] + 1
-			queue = append(queue, v)
-		}
+	dist[start] = 0
+	g.BFS(
+		start, // Root of BFS
+		func(from grid.Node[rune]) []grid.Node[rune] {
+			return climable(from, g.GetNeigbhours(from.X, from.Y))
+		}, // Neighbours callback to get neighbouring nodes
+		func(parent, child grid.Node[rune]) {
+			dist[child] = dist[parent] + 1
+		}, // Callback on parent and child in the BFS order
+	)
+	if v, ok := dist[end]; ok {
+		return v
+	} else {
+		// In case end is unreachable return maximum distance
+		return g.SizeX() * g.SizeY()
 	}
-
-	return g.SizeX() * g.SizeY()
 }
 
 func Part1Solver(file string) int {
 	g := grid.Parse(util.Collect(util.ReadLines(file)), func(c rune) rune { return c })
-	start := g.Find('S')
-	if len(start) != 1 {
-		panic("Did not found starting point")
-	}
-	s := start[0]
-	return findMinDistance(g, s)
+	start := g.Find('S')[0]
+	end := g.Find('E')[0]
+	return bothPartSolver(g, start, end)
 }
 
 func Part1() string {
