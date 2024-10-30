@@ -1,11 +1,11 @@
 package day6
 
+import "fmt"
+
 func Part2Solver(in string) int {
-	max := len(in)
-	for i := 0; i+14 < max; i++ {
-		if unique(in[i : i+14]) {
-			return i + 14
-		}
-	}
-	panic("solution not found")
+	return bothPartsSolver(in, 14)
+}
+
+func Part2() string {
+	return fmt.Sprintf("Part 2: %d", Part2Solver(input))
 }
