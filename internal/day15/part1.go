@@ -1,6 +1,7 @@
 package day15
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 
@@ -12,6 +13,7 @@ import (
 type reading struct {
 	sensor grid.Coord
 	beacon grid.Coord
+	dist   int // Manhattan distance from sensor to beacon
 }
 
 func parseReading(line string) reading {
@@ -24,6 +26,7 @@ func parseReading(line string) reading {
 	by, _ := strconv.Atoi(res[4])
 	r.sensor = grid.Coord{X: sx, Y: sy}
 	r.beacon = grid.Coord{X: bx, Y: by}
+	r.dist = grid.Distance(r.sensor, r.beacon)
 	return r
 }
 
@@ -41,8 +44,7 @@ func parseReadings(in <-chan string) <-chan reading {
 func Part1Solver(file string, line int) int {
 	s := channels.Collect(parseReadings(channels.ReadLines(file)))
 	xs := slice.Flatten(slice.Map(s, func(r reading) []int {
-		d := grid.Distance(r.beacon, r.sensor)
-		return []int{r.sensor.X + d, r.sensor.X - d}
+		return []int{r.sensor.X + r.dist, r.sensor.X - r.dist}
 	}))
 	xmin := slice.Min(xs)
 	xmax := slice.Max(xs)
@@ -53,8 +55,7 @@ func Part1Solver(file string, line int) int {
 		for _, v := range s {
 			c := grid.Coord{X: x, Y: y}
 			distLine := grid.Distance(c, v.sensor)
-			distBeacon := grid.Distance(v.beacon, v.sensor)
-			if distLine <= distBeacon && !(c == v.beacon || c == v.sensor) {
+			if distLine <= v.dist && !(c == v.beacon || c == v.sensor) {
 				ret++
 				break
 			}
@@ -62,4 +63,8 @@ func Part1Solver(file string, line int) int {
 	}
 
 	return ret
+}
+
+func Part1() string {
+	return fmt.Sprintf("Part 1: %d", Part1Solver("../../internal/day15/input.txt", 2000000))
 }

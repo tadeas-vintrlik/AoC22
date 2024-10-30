@@ -28,8 +28,20 @@ func TestPart2(t *testing.T) {
 
 func TestPart2Final(t *testing.T) {
 	act := Part2Solver("input.txt", 4000000)
-	exp := 56000011
+	exp := 13213086906101
 	if act != exp {
 		t.Errorf("%d != %d", act, exp)
+	}
+}
+
+func BenchmarkPart1(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Part1Solver("input.txt", 2000000)
+	}
+}
+
+func BenchmarkPart2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Part2Solver("input.txt", 4000000)
 	}
 }
