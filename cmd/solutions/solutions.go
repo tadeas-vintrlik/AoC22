@@ -9,6 +9,7 @@ import (
 	"github.com/tadeas-vintrlik/AoC22/internal/day4"
 	"github.com/tadeas-vintrlik/AoC22/internal/day5"
 	"github.com/tadeas-vintrlik/AoC22/internal/day6"
+	"github.com/tadeas-vintrlik/AoC22/internal/day7"
 )
 
 type partFunc func() string
@@ -22,6 +23,7 @@ var s []solFunc = []solFunc{
 	{day4.Part1, day4.Part2},
 	{day5.Part1, day5.Part2},
 	{day6.Part1, day6.Part2},
+	{day7.Part1, day7.Part2},
 }
 
 func main() {
